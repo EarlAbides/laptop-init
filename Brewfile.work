@@ -13,6 +13,10 @@ cask "corretto@11"
 cask "corretto@17"
 cask "corretto@21"
 
+# --- Cloud & Kubernetes ---
+brew "awscli"
+brew "kubectl"
+
 # --- Infrastructure ---
 brew "helm"
 brew "argocd"
@@ -24,5 +28,6 @@ brew "tgenv"
 brew "mongosh"
 
 # --- Apps ---
+cask "docker-desktop"
 cask "lens"
 cask "postman"
