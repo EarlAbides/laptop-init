@@ -137,6 +137,28 @@ configure_git() {
   ok "Git configured"
 }
 
+# --- Claude Code ---
+configure_claude_code() {
+  info "Configuring Claude Code status line..."
+  mkdir -p "$HOME/.claude"
+
+  # Symlink the status line script
+  ln -sf "$SCRIPT_DIR/claude/statusline.sh" "$HOME/.claude/statusline-command.sh"
+  ok "Linked statusline script"
+
+  # Merge statusLine config into settings.json (preserves existing settings)
+  local settings="$HOME/.claude/settings.json"
+  local sl_config='{"statusLine":{"type":"command","command":"bash ~/.claude/statusline-command.sh"}}'
+  if [[ -f "$settings" ]]; then
+    local merged
+    merged=$(jq --argjson sl "$sl_config" '. * $sl' "$settings")
+    echo "$merged" > "$settings"
+  else
+    echo "$sl_config" | jq . > "$settings"
+  fi
+  ok "Claude Code status line configured"
+}
+
 # --- iTerm2 ---
 configure_iterm2() {
   info "Configuring iTerm2..."
@@ -173,6 +195,7 @@ main() {
   configure_shell
   configure_starship
   configure_git
+  configure_claude_code
   configure_iterm2
 
   # Run profile-specific setup if it exists
