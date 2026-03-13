@@ -1,0 +1,75 @@
+# =============================================================================
+# Work aliases — loaded only on work machines
+# =============================================================================
+
+# --- Environment ---
+export AWS_REGION=us-west-2
+
+# --- Java version switching ---
+alias j8='export JAVA_HOME="/Library/Java/JavaVirtualMachines/amazon-corretto-8.jdk/Contents/Home"'
+alias j11='export JAVA_HOME="$(/usr/libexec/java_home --version 11)"'
+alias j17='export JAVA_HOME="$(/usr/libexec/java_home --version 17)" && export MAVEN_OPTS="-Xms512m -Xmx2g"'
+alias j21='export JAVA_HOME="$(/usr/libexec/java_home --version 21)" && export MAVEN_OPTS="-Xms512m -Xmx2g"'
+
+# --- Java / Maven ---
+alias mci='mvn clean install -DskipTests -Denforcer.skip=true'
+
+# --- Terraform / Terragrunt ---
+alias tf='terraform'
+alias tgclean='find . -type d -name ".terragrunt-cache" -prune -exec rm -rf {} \;'
+
+# --- AWS SSM ---
+alias ssm='aws ssm start-session --target'
+
+# --- AWS Account Login ---
+alias dwpnp='aws-login awsdwpnp'
+alias dwp='aws-login awsdwp'
+alias dimnp='aws-login awsdimnp'
+alias dim='aws-login awsdim'
+alias invnp='aws-login awsddcinvnp && kubectl config use-context arn:aws:eks:us-west-2:451942341868:cluster/inventory_nonprod'
+alias inv='aws-login awsddcinv && kubectl config use-context arn:aws:eks:us-west-2:893800476825:cluster/inventory_prod'
+alias invsup='aws-login awsddcinvsup'
+alias doinp='aws-login awsdoinp'
+alias doi='aws-login awsdoi'
+
+# --- S3 ---
+alias s3vi='s3-edit edit'
+
+# --- BMAD ---
+alias bmad="npx bmad-method install --directory ./ --custom-content ~/git/cai-spec-driven/bmad-custom-modules-src/cai-standards --modules bmm --tools claude-code --user-name Jeffrey --communication-language English --document-output-language English --output-folder _bmad-output --yes"
+
+# --- Functions ---
+
+aws-login() {
+    account=$1
+    export ALKS_ACCOUNT=${account}
+    local short=${account#aws}
+    short=${short#ddc}
+    export ALKS_ACCOUNT_SHORT=$short
+
+    typeset -A available
+    available=(
+        awsdwpnp    "247721768464/ALKSAdmin"
+        awsdwp      "941071384133/ALKSAdmin"
+        awsddcinvnp "451942341868/ALKSAdmin"
+        awsddcinv   "893800476825/ALKSAdmin"
+        awsdpsnp    "489430075229/ALKSAdmin"
+        awsdps      "249738108146/ALKSAdmin"
+        awsdimnp    "803429724514/ALKSAdmin"
+        awsdim      "833167883832/ALKSAdmin"
+        awsdoinp    "475961345904/ALKSAdmin"
+        awsdoi      "358352689286/ALKSAdmin"
+        awsddcinvsup "186127596926/ALKSAdmin"
+    )
+
+    alks_account=${available[$account]}
+
+    alks sessions open -i -f -o creds -a $alks_account
+}
+
+podbyip() {
+    kubectl get --all-namespaces --output json pods | jq '.items[] | select(.status.podIP=="${1}")' | jq .metadata.name
+}
+
+# --- Defaults ---
+j11

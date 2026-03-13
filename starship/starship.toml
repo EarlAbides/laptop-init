@@ -1,0 +1,108 @@
+# =============================================================================
+# Starship prompt configuration
+# Docs: https://starship.rs/config/
+# Requires: Nerd Font (e.g., JetBrainsMono Nerd Font)
+# =============================================================================
+
+# General
+format = """
+$directory\
+${custom.git_clean}\
+${custom.git_dirty}\
+${custom.java}\
+$dotnet\
+$nodejs\
+$python\
+$docker_context\
+$fill\
+$cmd_duration\
+$line_break\
+$env_var\
+$character"""
+
+# Timeout for commands that starship runs (ms)
+command_timeout = 1000
+
+# Right-align cmd_duration using fill
+[fill]
+symbol = " "
+
+[character]
+success_symbol = "[❯](green)"
+error_symbol = "[❯](red)"
+vimcmd_symbol = "[❮](green)"
+
+[directory]
+truncation_length = 5
+truncate_to_repo = true
+style = "#89b4fa"
+read_only = " 󰌾"
+format = "[$path ]($style)[$read_only]($style)"
+
+[git_branch]
+disabled = true
+
+[git_status]
+disabled = true
+
+# --- Git branch: green when clean, orange when dirty ---
+[custom.git_clean]
+when = 'git rev-parse --is-inside-work-tree &>/dev/null && [ -z "$(git status --porcelain 2>/dev/null)" ]'
+command = "git branch --show-current 2>/dev/null || git rev-parse --short HEAD 2>/dev/null"
+format = "[$output](#859900)"
+shell = ['bash']
+
+[custom.git_dirty]
+when = '[ -n "$(git status --porcelain 2>/dev/null)" ]'
+command = "git branch --show-current 2>/dev/null || git rev-parse --short HEAD 2>/dev/null"
+format = "[$output](#f5a623)"
+shell = ['bash']
+
+[kubernetes]
+disabled = true
+
+[java]
+disabled = true
+
+[custom.java]
+when = 'test -f pom.xml || test -f build.gradle || test -f build.gradle.kts || ls *.java &>/dev/null'
+command = 'v=$(java -version 2>&1 | head -1 | grep -oE "[0-9]+\.[0-9]+" | head -1); case $v in 1.*) echo ${v#1.};; *) echo ${v%%.*};; esac'
+format = "[ $output](#5382a1) "
+shell = ['bash']
+
+[dotnet]
+style = "#b4befe"
+format = "[ $version]($style) "
+version_format = "${major}"
+
+[nodejs]
+style = "#a6e3a1"
+format = "[ $version]($style) "
+version_format = "${major}"
+
+[python]
+style = "#f9e2af"
+format = '[ $version]($style) '
+
+[docker_context]
+disabled = true
+
+[aws]
+disabled = true
+
+[env_var.ALKS_ACCOUNT_SHORT]
+style = "#FF9900"
+format = '[ $env_value ]($style)'
+
+[cmd_duration]
+min_time = 2000
+format = "[󰔟 $duration]($style)"
+style = "#a6adc8"
+
+[username]
+show_always = false
+style_user = "#cdd6f4"
+format = "[$user]($style) "
+
+[hostname]
+disabled = true

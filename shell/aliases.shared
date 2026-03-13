@@ -1,0 +1,23 @@
+# =============================================================================
+# Shared aliases — loaded on all machines
+# =============================================================================
+
+# --- Kubernetes ---
+alias k='kubectl'
+
+# --- Git shortcuts ---
+alias gs='git status'
+alias gd='git diff'
+alias gl='git log --oneline -20'
+alias gp='git pull'
+
+# --- General ---
+alias ll='ls -lah'
+alias la='ls -A'
+alias ..='cd ..'
+alias ...='cd ../..'
+
+# --- Markdown reader (requires pandoc + lynx) ---
+rmd() {
+  pandoc "$1" | lynx -stdin
+}

@@ -1,0 +1,9 @@
+# ============================================================
+# Brewfile.home — Home-specific toolchain
+# ============================================================
+
+# --- C# / .NET / Unity ---
+# brew "dotnet"
+# cask "unity-hub"
+
+# --- Uncomment / add tools as needed ---

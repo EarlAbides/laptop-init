@@ -1,0 +1,28 @@
+# ============================================================
+# Brewfile.work — Work-specific toolchain
+# ============================================================
+
+# --- Java Development ---
+brew "openjdk"
+brew "maven"
+brew "gradle"
+brew "tomcat@7"
+brew "s3-edit"
+cask "corretto@8"
+cask "corretto@11"
+cask "corretto@17"
+cask "corretto@21"
+
+# --- Infrastructure ---
+brew "helm"
+brew "argocd"
+brew "istioctl"
+brew "tfenv"
+brew "tgenv"
+
+# --- Data ---
+brew "mongosh"
+
+# --- Apps ---
+cask "lens"
+cask "postman"

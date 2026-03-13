@@ -1,0 +1,43 @@
+# =============================================================================
+# .zshrc — managed by laptop-init
+# =============================================================================
+
+# --- Homebrew (Apple Silicon) ---
+if [[ -f /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# --- Local binaries (claude, etc.) ---
+export PATH="$HOME/.local/bin:$PATH"
+
+# --- History ---
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt SHARE_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+
+# --- Key bindings ---
+bindkey -e  # emacs mode
+
+# --- Completion ---
+autoload -Uz compinit && compinit
+
+# --- Aliases ---
+[[ -f ~/.aliases.shared ]]  && source ~/.aliases.shared
+[[ -f ~/.aliases.profile ]] && source ~/.aliases.profile
+
+# --- Plugins (via Homebrew) ---
+# zsh-autosuggestions
+if [[ -f $(brew --prefix 2>/dev/null)/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+  source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+
+# zsh-syntax-highlighting (must be last)
+if [[ -f $(brew --prefix 2>/dev/null)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
+  source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+
+# --- Starship Prompt ---
+eval "$(starship init zsh)"

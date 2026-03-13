@@ -1,0 +1,43 @@
+# ============================================================
+# Brewfile.shared — Core tools for all machines
+# ============================================================
+
+# --- Taps ---
+tap "homebrew/bundle"
+
+# --- Core CLI Tools ---
+brew "git"
+brew "gh"
+brew "jq"
+brew "wget"
+brew "tree"
+brew "stow"
+brew "awscli"
+brew "htop"
+brew "tealdeer"
+brew "uv"
+
+# --- Shell ---
+brew "starship"
+brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
+
+# --- Node ---
+brew "node"
+
+# --- Kubernetes ---
+brew "kubectl"
+
+# --- Nerd Fonts ---
+cask "font-0xproto-nerd-font"
+cask "font-3270-nerd-font"
+cask "font-fira-code-nerd-font"
+cask "font-meslo-lg-nerd-font"
+cask "font-monofur-nerd-font"
+cask "font-profont-nerd-font"
+cask "font-sauce-code-pro-nerd-font"
+cask "font-terminess-ttf-nerd-font"
+
+# --- Apps ---
+cask "docker-desktop"
+# VS Code and iTerm2 auto-update themselves — install manually
