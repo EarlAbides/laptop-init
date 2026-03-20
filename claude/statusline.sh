@@ -27,6 +27,9 @@ fi
 git_info=""
 if git -C "$cwd" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   branch=$(git -C "$cwd" symbolic-ref --short HEAD 2>/dev/null || git -C "$cwd" rev-parse --short HEAD 2>/dev/null)
+  if [ ${#branch} -gt 40 ]; then
+    branch="$(printf '%.37s' "$branch")..."
+  fi
   if [ -n "$(git -C "$cwd" status --porcelain 2>/dev/null)" ]; then
     # Dirty: orange #f5a623
     git_info=$(printf "\033[38;2;245;166;35m%s\033[0m" "$branch")
