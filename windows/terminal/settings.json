@@ -1,0 +1,44 @@
+{
+    "schemes": [
+        {
+            "name": "Solarized Dark",
+            "foreground": "#A2A589",
+            "background": "#161E1E",
+            "selectionBackground": "#073642",
+            "cursorColor": "#CD8900",
+            "black": "#073642",
+            "red": "#DC322F",
+            "green": "#859900",
+            "yellow": "#B58900",
+            "blue": "#268BD2",
+            "purple": "#D33682",
+            "cyan": "#2AA198",
+            "white": "#EEE8D5",
+            "brightBlack": "#586E75",
+            "brightRed": "#CB4B16",
+            "brightGreen": "#586E75",
+            "brightYellow": "#657B83",
+            "brightBlue": "#839496",
+            "brightPurple": "#6C71C4",
+            "brightCyan": "#93A1A1",
+            "brightWhite": "#FDF6E3"
+        }
+    ],
+    "profileDefaults": {
+        "colorScheme": "Solarized Dark",
+        "font": {
+            "face": "FiraCode Nerd Font",
+            "size": 14,
+            "weight": "normal"
+        },
+        "opacity": 100,
+        "useAcrylic": false,
+        "padding": "12",
+        "cursorShape": "bar",
+        "scrollbarState": "hidden",
+        "antialiasingMode": "cleartype",
+        "useAtlasEngine": true,
+        "initialCols": 100,
+        "initialRows": 29
+    }
+}
