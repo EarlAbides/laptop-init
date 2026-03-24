@@ -27,6 +27,9 @@ try {
     if ($isGit -eq 'true') {
         $branch = git -C $cwd symbolic-ref --short HEAD 2>$null
         if (-not $branch) { $branch = git -C $cwd rev-parse --short HEAD 2>$null }
+        if ($branch.Length -gt 40) {
+            $branch = $branch.Substring(0, 37) + '...'
+        }
         $dirty = git -C $cwd status --porcelain 2>$null
         if ($dirty) {
             $gitInfo = "${e}[38;2;245;166;35m${branch}${e}[0m"
