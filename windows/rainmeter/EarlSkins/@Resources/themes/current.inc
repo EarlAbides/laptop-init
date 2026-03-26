@@ -1,0 +1,1 @@
+C:/Users/jeffr/Projects/laptop-init/windows/rainmeter/EarlSkins/@Resources/themes/firewatch-purple.inc

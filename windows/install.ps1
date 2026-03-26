@@ -278,6 +278,61 @@ function Configure-WindowsTerminal {
     Write-Ok "Windows Terminal configured with Solarized Dark + Nerd Font"
 }
 
+# --- Rainmeter (home profile only) ---
+function Configure-Rainmeter {
+    Write-Info "Configuring Rainmeter..."
+
+    # Install Rainmeter via winget
+    $installed = winget list --id Rainmeter.Rainmeter --accept-source-agreements 2>$null
+    if ($LASTEXITCODE -ne 0 -or $installed -notmatch 'Rainmeter\.Rainmeter') {
+        Write-Info "Installing Rainmeter..."
+        winget install --id Rainmeter.Rainmeter --accept-package-agreements --accept-source-agreements
+    }
+    Write-Ok "Rainmeter installed"
+
+    # Symlink EarlSkins into Rainmeter's skins directory
+    $docsPath = [Environment]::GetFolderPath('MyDocuments')
+    $skinsDir = Join-Path $docsPath 'Rainmeter\Skins'
+    if (-not (Test-Path $skinsDir)) {
+        New-Item -ItemType Directory -Path $skinsDir -Force | Out-Null
+    }
+    New-Item -ItemType SymbolicLink `
+        -Path (Join-Path $skinsDir 'EarlSkins') `
+        -Value "$ScriptDir\rainmeter\EarlSkins" -Force | Out-Null
+    Write-Ok "Linked EarlSkins into Rainmeter Skins directory"
+
+    # Reset SkinPath if it points to the old standalone repo
+    $rmIni = Join-Path $env:APPDATA 'Rainmeter\Rainmeter.ini'
+    if (Test-Path $rmIni) {
+        $content = Get-Content $rmIni -Raw
+        $expectedPath = $skinsDir + '\'
+        $currentPath = [regex]::Match($content, 'SkinPath=(.*)').Groups[1].Value
+        if ($currentPath -and $currentPath -ne $expectedPath) {
+            $content = $content -replace 'SkinPath=.*', "SkinPath=$expectedPath"
+            Set-Content $rmIni $content -Encoding UTF8
+            Write-Ok "Reset Rainmeter SkinPath from old repo to default"
+        }
+    }
+
+    # Create theme symlink if not present
+    $themesDir = "$ScriptDir\rainmeter\EarlSkins\@Resources\themes"
+    $currentTheme = Join-Path $themesDir 'current.inc'
+    if (-not (Test-Path $currentTheme)) {
+        New-Item -ItemType SymbolicLink -Path $currentTheme `
+            -Value (Join-Path $themesDir 'firewatch-purple.inc') -Force | Out-Null
+        Write-Ok "Set default theme to firewatch-purple"
+    }
+
+    # Refresh Rainmeter if running
+    $rmExe = "${env:ProgramFiles}\Rainmeter\Rainmeter.exe"
+    if ((Get-Process -Name Rainmeter -ErrorAction SilentlyContinue) -and (Test-Path $rmExe)) {
+        & $rmExe !RefreshApp
+        Write-Ok "Rainmeter refreshed"
+    }
+
+    Write-Ok "Rainmeter configured"
+}
+
 # --- Main ---
 function Main {
     Write-Host ""
@@ -296,6 +351,11 @@ function Main {
     Configure-Git
     Configure-ClaudeCode
     Configure-WindowsTerminal
+
+    # Home-profile-only setup
+    if ($script:LaptopProfile -eq 'home') {
+        Configure-Rainmeter
+    }
 
     # Run profile-specific setup if it exists
     $profileScript = "$ScriptDir\profiles\$script:LaptopProfile.ps1"
