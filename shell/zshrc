@@ -41,3 +41,10 @@ fi
 
 # --- Starship Prompt ---
 eval "$(starship init zsh)"
+
+# bun completions
+[ -s "/Users/jearl/.bun/_bun" ] && source "/Users/jearl/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
