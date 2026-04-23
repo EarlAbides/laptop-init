@@ -50,15 +50,15 @@ aws-login() {
     typeset -A available
     available=(
         awsdwpnp    "247721768464/ALKSAdmin"
-        awsdwp      "941071384133/ALKSAdmin"
+        awsdwp      "941071384133/ALKSReadOnly"
         awsddcinvnp "451942341868/ALKSAdmin"
-        awsddcinv   "893800476825/ALKSAdmin"
+        awsddcinv   "893800476825/ALKSReadOnly"
         awsdpsnp    "489430075229/ALKSAdmin"
-        awsdps      "249738108146/ALKSAdmin"
+        awsdps      "249738108146/ALKSReadOnly"
         awsdimnp    "803429724514/ALKSAdmin"
-        awsdim      "833167883832/ALKSAdmin"
+        awsdim      "833167883832/ALKSReadOnly"
         awsdoinp    "475961345904/ALKSAdmin"
-        awsdoi      "358352689286/ALKSAdmin"
+        awsdoi      "358352689286/ALKSReadOnly"
         awsddcinvsup "186127596926/ALKSAdmin"
     )
 
