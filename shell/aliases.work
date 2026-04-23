@@ -41,6 +41,12 @@ alias bmad="npx bmad-method install --directory ./ --custom-content ~/git/cai-sp
 # --- Functions ---
 
 aws-login() {
+    #
+    # TODO: Handle ChangeMinder, e.g.
+    # alks sessions open -a awsmyprodaccount -r Admin --ciid CI01234567 --activity-type "Manual Deployment of Code or Infrastructure" --description "Using alks-cli with ChangeMinder!" -o json
+    #
+    # See https://pages.ghe.coxautoinc.com/ETS-CloudAutomation/Cloud-Platform-Docs/docs/tools_by_cloud_provider/aws/security_services/alks/alks_changeminder/alks_cli_changeminder
+
     account=$1
     export ALKS_ACCOUNT=${account}
     local short=${account#aws}
