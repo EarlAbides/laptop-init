@@ -32,6 +32,12 @@ alias invsup='aws-login awsddcinvsup'
 alias doinp='aws-login awsdoinp'
 alias doi='aws-login awsdoi'
 
+# --- AWS Account Login (Admin / ChangeMinder) ---
+alias dwp-admin='aws-login-admin awsdwp'
+alias dim-admin='aws-login-admin awsdim'
+alias inv-admin='aws-login-admin awsddcinv && kubectl config use-context arn:aws:eks:us-west-2:893800476825:cluster/inventory_prod'
+alias doi-admin='aws-login-admin awsdoi'
+
 # --- S3 ---
 alias s3vi='s3-edit edit'
 
@@ -41,12 +47,6 @@ alias bmad="npx bmad-method install --directory ./ --custom-content ~/git/cai-sp
 # --- Functions ---
 
 aws-login() {
-    #
-    # TODO: Handle ChangeMinder, e.g.
-    # alks sessions open -a awsmyprodaccount -r Admin --ciid CI01234567 --activity-type "Manual Deployment of Code or Infrastructure" --description "Using alks-cli with ChangeMinder!" -o json
-    #
-    # See https://pages.ghe.coxautoinc.com/ETS-CloudAutomation/Cloud-Platform-Docs/docs/tools_by_cloud_provider/aws/security_services/alks/alks_changeminder/alks_cli_changeminder
-
     account=$1
     export ALKS_ACCOUNT=${account}
     local short=${account#aws}
@@ -71,6 +71,86 @@ aws-login() {
     alks_account=${available[$account]}
 
     alks sessions open -i -f -o creds -a $alks_account
+}
+
+# Admin login to a prod account with ChangeMinder. Infers CIID from
+# ./.cai/catalog.yaml, prompts for activity-type and description, then opens
+# an ALKS session that creates (and auto-closes) a change ticket.
+# See https://pages.ghe.coxautoinc.com/ETS-CloudAutomation/Cloud-Platform-Docs/docs/tools_by_cloud_provider/aws/security_services/alks/alks_changeminder/alks_cli_changeminder
+aws-login-admin() {
+    local account=$1
+
+    typeset -A admin_accounts
+    admin_accounts=(
+        awsdwp     "941071384133/ALKSAdmin"
+        awsddcinv  "893800476825/ALKSAdmin"
+        awsdps     "249738108146/ALKSAdmin"
+        awsdim     "833167883832/ALKSAdmin"
+        awsdoi     "358352689286/ALKSAdmin"
+    )
+
+    local alks_account=${admin_accounts[$account]}
+    if [[ -z $alks_account ]]; then
+        echo "aws-login-admin: unknown prod account '$account'" >&2
+        return 1
+    fi
+
+    local inferred_ciid=""
+    if [[ -f ./.cai/catalog.yaml ]]; then
+        inferred_ciid=$(grep -E '^[[:space:]]*ci-id:' ./.cai/catalog.yaml \
+            | head -1 \
+            | sed -E 's/.*ci-id:[[:space:]]*//; s/["'"'"']//g' \
+            | tr -d '[:space:]')
+    fi
+
+    local ciid input
+    if [[ -n $inferred_ciid ]]; then
+        printf "CIID [%s]: " "$inferred_ciid"
+    else
+        printf "CIID: "
+    fi
+    read input
+    ciid=${input:-$inferred_ciid}
+    if [[ -z $ciid ]]; then
+        echo "aws-login-admin: CIID is required" >&2
+        return 1
+    fi
+
+    local activity PS3="> "
+    echo "Activity type:"
+    select activity in \
+        "Manual Deployment of Code or Infrastructure" \
+        "Configuration Change" \
+        "Feature Toggle Change" \
+        "Operational Task" \
+        "Data Management"
+    do
+        [[ -n $activity ]] && break
+    done
+
+    local description
+    printf "Description: "
+    read description
+    if [[ -z $description ]]; then
+        echo "aws-login-admin: description is required" >&2
+        return 1
+    fi
+
+    local duration
+    printf "Duration in hours [1]: "
+    read duration
+    duration=${duration:-1}
+
+    export ALKS_ACCOUNT=$account
+    local short=${account#aws}
+    short=${short#ddc}
+    export ALKS_ACCOUNT_SHORT=$short
+
+    alks sessions open -i -f -o creds -a $alks_account \
+        --duration "$duration" \
+        --ciid "$ciid" \
+        --activity-type "$activity" \
+        --description "$description"
 }
 
 podbyip() {
