@@ -10,6 +10,7 @@ alias j8='export JAVA_HOME="/Library/Java/JavaVirtualMachines/amazon-corretto-8.
 alias j11='export JAVA_HOME="$(/usr/libexec/java_home --version 11)"'
 alias j17='export JAVA_HOME="$(/usr/libexec/java_home --version 17)" && export MAVEN_OPTS="-Xms512m -Xmx2g"'
 alias j21='export JAVA_HOME="$(/usr/libexec/java_home --version 21)" && export MAVEN_OPTS="-Xms512m -Xmx2g"'
+alias j25='export JAVA_HOME="$(/usr/libexec/java_home --version 25)" && export MAVEN_OPTS="-Xms512m -Xmx2g"'
 
 # --- Java / Maven ---
 alias mci='mvn clean install -DskipTests -Denforcer.skip=true'
