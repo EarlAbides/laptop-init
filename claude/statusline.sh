@@ -61,6 +61,25 @@ if [ -n "$cost" ] && [ "$cost" != "null" ] && [ "$cost" != "0" ]; then
   cost_info=$(printf " \033[38;2;166;173;200m%s\033[0m" "$cost_fmt")
 fi
 
+# --- Ponytail mode badge ---
+# ${CLAUDE_CONFIG_DIR:-~/.claude}/.ponytail-active holds the level; absent = off.
+pony_info=""
+pony_flag="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/.ponytail-active"
+if [ -f "$pony_flag" ]; then
+  mode=$(head -n1 "$pony_flag" | tr -d '[:space:]')
+  # ultra amber #d7875f, everything else green #87af87
+  if [ "$mode" = "ultra" ]; then
+    pony_color="\033[38;2;215;135;95m"
+  else
+    pony_color="\033[38;2;135;175;135m"
+  fi
+  if [ -z "$mode" ] || [ "$mode" = "full" ]; then
+    pony_info=$(printf " ${pony_color}[PONYTAIL]\033[0m")
+  else
+    pony_info=$(printf " ${pony_color}[PONYTAIL:%s]\033[0m" "$(printf '%s' "$mode" | tr '[:lower:]' '[:upper:]')")
+  fi
+fi
+
 # --- Assemble: dir  branch [model] ctx cost ---
 # Directory in #89b4fa (Catppuccin blue)
 printf "\033[38;2;137;180;250m%s\033[0m" "$display_dir"
@@ -74,3 +93,4 @@ printf " \033[38;2;166;173;200m%s\033[0m" "$model"
 
 printf "%s" "$ctx_info"
 printf "%s" "$cost_info"
+printf "%s" "$pony_info"
