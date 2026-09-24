@@ -170,6 +170,28 @@ configure_iterm2() {
   ok "iTerm2 configured to load/save preferences from $SCRIPT_DIR/iterm2"
 }
 
+# --- cmux ---
+configure_cmux() {
+  info "Configuring cmux..."
+  local cmux_dir="$HOME/.config/cmux"
+  mkdir -p "$cmux_dir/sidebars"
+
+  if [[ -f "$cmux_dir/cmux.json" && ! -L "$cmux_dir/cmux.json" ]]; then
+    warn "Backing up existing cmux.json to cmux.json.bak"
+    cp "$cmux_dir/cmux.json" "$cmux_dir/cmux.json.bak"
+  fi
+  ln -sf "$SCRIPT_DIR/cmux/cmux.json" "$cmux_dir/cmux.json"
+  ok "Linked cmux.json"
+
+  # Link sidebar files individually so local experiments can sit alongside.
+  for sidebar in "$SCRIPT_DIR"/cmux/sidebars/*; do
+    ln -sf "$sidebar" "$cmux_dir/sidebars/${sidebar:t}"
+  done
+  # Use the cards sidebar as the left sidebar.
+  defaults write com.cmuxterm.app cmuxExtensionSidebar.providerId -string "cmux.sidebar.custom.cards"
+  ok "Linked cmux sidebars (cards selected)"
+}
+
 # --- Remove OMZ (if present) ---
 remove_omz() {
   if [[ -d "$HOME/.oh-my-zsh" ]]; then
@@ -197,6 +219,7 @@ main() {
   configure_git
   configure_claude_code
   configure_iterm2
+  configure_cmux
 
   # Run profile-specific setup if it exists
   local profile_script="$SCRIPT_DIR/profiles/$PROFILE.sh"

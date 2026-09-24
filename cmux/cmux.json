@@ -1,0 +1,12 @@
+{
+  "$schema": "https://raw.githubusercontent.com/manaflow-ai/cmux/main/web/data/cmux.schema.json",
+  "schemaVersion": 1,
+
+  // JSONC. Only settings that differ from cmux defaults live here; run
+  // `cmux docs settings` for the full list. Reload with `cmux reload-config`.
+
+  "app": {
+    // Keep workspace order fixed; don't bump a workspace to the top when it gets a notification.
+    "reorderOnNotification": false
+  }
+}

@@ -11,6 +11,7 @@ Bootstrap script for setting up a fresh development machine with preferred tools
 - Configures git with aliases, VS Code diff/merge, and profile-based identity
 - Configures the Claude Code status line
 - Configures your terminal emulator (iTerm2 on macOS, Windows Terminal on Windows)
+- Configures [cmux](https://cmux.com) on macOS: fixed workspace order and a card sidebar that has group-colored title bars, directory-name titles, starship-colored branches and a Claude context meter
 
 ## Profiles
 
@@ -50,6 +51,8 @@ git/gitconfig.work      Work git identity
 starship/starship.toml  Starship prompt config (shared cross-platform)
 claude/statusline.sh    Claude Code status line (bash)
 iterm2/                 iTerm2 preferences
+cmux/cmux.json          cmux settings (non-default only)
+cmux/sidebars/cards.js  cmux workspace-card sidebar (fed by claude/statusline.sh)
 profiles/home.sh        Home post-setup hook
 profiles/work.sh        Work post-setup hook
 ```

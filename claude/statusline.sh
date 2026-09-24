@@ -43,13 +43,18 @@ fi
 ctx_info=""
 if [ -n "$used" ] && [ "$used" != "null" ]; then
   pct=$(echo "$used" | cut -d. -f1)
-  # Color: green < 50, yellow < 75, red >= 75
-  if [ "$pct" -ge 75 ] 2>/dev/null; then
-    ctx_color="\033[31m"
-  elif [ "$pct" -ge 50 ] 2>/dev/null; then
-    ctx_color="\033[33m"
+  # Color in 20% bands, matching the cmux card meter (cmux/sidebars/cards.js):
+  # green, yellow-green, amber, amber-red, red
+  if [ "$pct" -ge 80 ] 2>/dev/null; then
+    ctx_color="\033[38;2;229;83;75m"
+  elif [ "$pct" -ge 60 ] 2>/dev/null; then
+    ctx_color="\033[38;2;229;122;60m"
+  elif [ "$pct" -ge 40 ] 2>/dev/null; then
+    ctx_color="\033[38;2;224;160;48m"
+  elif [ "$pct" -ge 20 ] 2>/dev/null; then
+    ctx_color="\033[38;2;168;197;69m"
   else
-    ctx_color="\033[32m"
+    ctx_color="\033[38;2;95;184;120m"
   fi
   ctx_info=$(printf " ${ctx_color}%s%%\033[0m" "$pct")
 fi
@@ -78,6 +83,17 @@ if [ -f "$pony_flag" ]; then
   else
     pony_info=$(printf " ${pony_color}[PONYTAIL:%s]\033[0m" "$(printf '%s' "$mode" | tr '[:lower:]' '[:upper:]')")
   fi
+fi
+
+# --- cmux: publish stats for the workspace card (cmux/sidebars/cards.js) ---
+# The custom sidebar can read a workspace's progress but not its statuses, so
+# progress carries them: value = context used, label = "model · cost".
+# ponytail: one progress slot per workspace, so two Claude tabs in one
+# workspace overwrite each other; last render wins.
+if [ -n "$CMUX_WORKSPACE_ID" ] && command -v cmux >/dev/null 2>&1 && [ -n "$pct" ]; then
+  card_label=$(printf '%s' "$model" | sed 's/ (\(.*\) context)/ \1/')
+  [ -n "$cost_fmt" ] && card_label="$card_label · $cost_fmt"
+  (cmux set-progress "$(awk "BEGIN{print $pct/100}")" --label "$card_label" >/dev/null 2>&1 &)
 fi
 
 # --- Assemble: dir  branch [model] ctx cost ---

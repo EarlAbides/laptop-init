@@ -28,4 +28,4 @@ cask "font-profont-nerd-font"
 cask "font-sauce-code-pro-nerd-font"
 cask "font-terminess-ttf-nerd-font"
 
-# VS Code and iTerm2 auto-update themselves — install manually
+# VS Code, iTerm2 and cmux auto-update themselves — install manually
