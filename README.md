@@ -11,7 +11,7 @@ Bootstrap script for setting up a fresh development machine with preferred tools
 - Configures git with aliases, VS Code diff/merge, and profile-based identity
 - Configures the Claude Code status line
 - Configures your terminal emulator (iTerm2 on macOS, Windows Terminal on Windows)
-- Configures [cmux](https://cmux.com) on macOS: fixed workspace order and a card sidebar that has group-colored title bars, directory-name titles, starship-colored branches and a Claude context meter
+- Configures [cmux](https://cmux.com) (macOS only; cmux has no Windows build): fixed workspace order and a card sidebar that has group-colored title bars, directory-name titles, starship-colored branches and a Claude context meter
 
 ## Profiles
 
@@ -66,6 +66,8 @@ pwsh -ExecutionPolicy Bypass -File .\windows\install.ps1
 ```
 
 Uses [winget](https://github.com/microsoft/winget-cli) for tools and [Scoop](https://scoop.sh) for Nerd Fonts. Configures PowerShell 7 with PSReadLine (autosuggestions, syntax highlighting) and Windows Terminal with Solarized Dark + FiraCode Nerd Font.
+
+cmux is not set up on Windows: it is a macOS-only app. Windows Terminal panes and tabs fill that role, and `claude/statusline.sh`'s cmux hook does not apply (Windows uses `windows/claude/statusline.ps1`).
 
 ### Structure
 
