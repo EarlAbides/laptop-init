@@ -177,10 +177,10 @@ const GIT_CLEAN = "#859900";
 const GIT_DIRTY = "#f5a623";
 
 // Title-bar tint by group name; groups not listed fall back to their own color.
-const GROUP_COLORS = { DDC: "#D2691E", JRE: "#3A86D8" };
+const GROUP_COLORS = { DDC: "#D2691E", JRE: "#3A86D8", ATC: "#3FA34D" };
 const groupColor = (g) => (g ? GROUP_COLORS[g.name] ?? g.color ?? null : null);
 // Lighter variant for group header text + dot, which sit on the bare sidebar.
-const GROUP_TEXT_COLORS = { DDC: "#F4A06A", JRE: "#7DB4F0" };
+const GROUP_TEXT_COLORS = { DDC: "#F4A06A", JRE: "#7DB4F0", ATC: "#7FD08A" };
 const groupTextColor = (g) => (g ? GROUP_TEXT_COLORS[g.name] ?? groupColor(g) : null);
 
 // Live agent on the workspace, if any. Stats come from the Claude statusline
