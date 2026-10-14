@@ -29,6 +29,8 @@ alias dimnp='aws-login awsdimnp'
 alias dim='aws-login awsdim'
 alias invnp='aws-login awsddcinvnp && kubectl config use-context arn:aws:eks:us-west-2:451942341868:cluster/inventory_nonprod'
 alias inv='aws-login awsddcinv && kubectl config use-context arn:aws:eks:us-west-2:893800476825:cluster/inventory_prod'
+alias atcnp='aws-login awsatcetlnp'
+alias atc='aws-login awsatcetl'
 alias invsup='aws-login awsddcinvsup'
 alias doinp='aws-login awsdoinp'
 alias doi='aws-login awsdoi'
@@ -37,6 +39,7 @@ alias doi='aws-login awsdoi'
 alias dwp-admin='aws-login-admin awsdwp'
 alias dim-admin='aws-login-admin awsdim'
 alias inv-admin='aws-login-admin awsddcinv && kubectl config use-context arn:aws:eks:us-west-2:893800476825:cluster/inventory_prod'
+alias atc-admin='aws-login-admin awsatcetl'
 alias doi-admin='aws-login-admin awsdoi'
 
 # --- S3 ---
@@ -67,6 +70,8 @@ aws-login() {
         awsdoinp    "475961345904/ALKSAdmin"
         awsdoi      "358352689286/ALKSReadOnly"
         awsddcinvsup "186127596926/ALKSAdmin"
+        awsatcetlnp "862690627656/ALKSAdmin"
+        awsatcetl   "763129451901/ALKSReadOnly"
     )
 
     alks_account=${available[$account]}
@@ -88,6 +93,7 @@ aws-login-admin() {
         awsdps     "249738108146/ALKSAdmin"
         awsdim     "833167883832/ALKSAdmin"
         awsdoi     "358352689286/ALKSAdmin"
+        awsatcetl  "763129451901/ALKSAdmin"
     )
 
     local alks_account=${admin_accounts[$account]}
